@@ -127,6 +127,8 @@
         return {
             'Content-Type': 'application/json; charset=UTF-8',
             ...authHeaders()
+            //'Authorization': `Bearer ${accessToken}`,
+            // ... spread 연산자 : 해당속성으로 추가해준다
         };
     }
 
@@ -134,7 +136,14 @@
         const response = await fetch(url, options);
         const data = await response.json().catch(() => null);
 
+        // 401 : UnAuthorized
+        // Access Token 이 없음 Access
+        // Access Token 이 만료됨
+        // Access Token 이 잘못됨
+        // 권한이 없음
+        // refreshToken : refreshToken 이 있음
         if (response.status === 401 && retry && refreshToken) {
+            // 401 && refreshToken : Access Token 이 만료됨
             await refreshAccessToken();
             const retryOptions = {
                 ...options,
@@ -167,10 +176,12 @@
         await getUsers();
     }
 
+    // Access Token과 Refresh Token을 재발급했습니다
     async function refreshAccessToken() {
-        if (!refreshToken) {
+        if (!refreshToken) { // !(refreshToken==true)
             throw new Error('Refresh Token이 없습니다. 다시 로그인하세요.');
         }
+        // 서버 @PostMapping("/api/auth/refresh")
         const data = await requestJson(`${AUTH_URL}/refresh`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json; charset=UTF-8'},

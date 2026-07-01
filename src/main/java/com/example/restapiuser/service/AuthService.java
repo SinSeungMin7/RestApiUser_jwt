@@ -92,8 +92,9 @@ public class AuthService {
     // [issueTokens()]
     //        ↓
     // 새 Access Token + 새 Refresh Token 발급
+
     public AuthResponse refresh(TokenRefreshRequest request) {
-        // Refresh Token 검증
+        // Refresh Token 검증 해서 회원(user)을 찾는다
         UserEntity user = refreshTokenService.verifyAndGetUser(request.refreshToken());
         //기존 Refresh Token 폐기
         refreshTokenService.revoke(request.refreshToken());

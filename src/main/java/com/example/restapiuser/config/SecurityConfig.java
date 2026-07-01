@@ -36,8 +36,10 @@ public class SecurityConfig {
         http
                 // csrf 꺼라
                 .csrf(AbstractHttpConfigurer::disable)
+                    // abstractHttpConfigurer.disable()
                 // 세션 꺼라
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 경로에 대한 권한 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/index.html",
@@ -133,7 +135,7 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        authoritiesConverter.setAuthorityPrefix("");
+        authoritiesConverter.setAuthorityPrefix("");   // JWT 권한 앞에 있는 SCOPE_ 를 제거한다
         authoritiesConverter.setAuthoritiesClaimName("roles");
 
         JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
