@@ -15,6 +15,14 @@ import java.util.List;
 
 @Service
 public class JwtService {
+    // Access Token을 생성하는 서비스 클래스입니다.
+    //  Refresh Token은 여기서 만들지 않습니다.
+    // 이 클래스는 오직 JWT Access Token 생성과 Access Token 만료 시간 계산을 담당
+    // 1. 현재 시간 계산
+    //2. Access Token 만료 시간 계산
+    //3. JWT payload에 들어갈 claim 구성
+    //4. HS256 방식으로 JWT 서명
+    //5. 최종 Access Token 문자열 반환
 
     private final JwtEncoder jwtEncoder;
     private final JwtProperties jwtProperties;
